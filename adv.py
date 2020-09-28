@@ -25,14 +25,13 @@ class Queue():
 # Load world
 world = World()
 
-### UPDATED PATHS ###
 # You may uncomment the smaller graphs for development and testing purposes.
-# map_file = "projects/adventure/maps/test_line.txt"
-# map_file = "projects/adventure/maps/test_cross.txt"
-# map_file = "projects/adventure/maps/test_loop.txt"
-# map_file = "projects/adventure/maps/test_loop_fork.txt"
-# map_file = "projects/adventure/maps/main_maze.txt"
-map_file = "projects/adventure/maps/main_maze.txt"
+# map_file = "maps/test_line.txt"
+# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop_fork.txt"
+# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -120,6 +119,29 @@ def find_nearest_room(to_id):
                     return path_to_room
 
     return None
+
+
+stack = list()
+stack.append('n')
+
+while len(room_graph) > len(room_maps):
+    dir = stack.pop()
+    next = player.current_room.get_room_in_direction(dir)
+    exits = player.current_room.get_exits()
+
+    if next:
+        stack.append(dir)
+        across_map(dir)
+        print(f"I'm in room {player.current_room.id}. I came from the {reverse_dir(dir)}")
+    elif len(stack) == 0:
+        for exit in exits:
+            to_next_dir = find_nearest_room(player.current_room.id)
+            for i, to_room in enumerate(to_next_dir):
+                across_map(to_room)
+                if i == len(to_next_dir) - 1:
+                    stack.append(to_room)
+
+    ### MY CODE ENDS HERE ###
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
