@@ -47,7 +47,22 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+### MY CODE STARTS HERE ###
+visited = set()
 
+room_maps = {
+    0: {'n': '?', 's': '?', 'e': '?', 'w': '?'}
+}
+
+def reverse_dir(dir):
+    if dir == 'n':
+        return 's'
+    elif dir == 's':
+        return 'n'
+    elif dir == 'w':
+        return 'e'
+    else:
+        return 'w'
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
