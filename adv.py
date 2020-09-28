@@ -97,7 +97,29 @@ def across_map(dir):
         room_maps[room_id] = directions
 
 
+def find_nearest_room(to_id):
+    queue = Queue()
+    path = []
+    queue.enqueue([(to_id, None)])
+    visited_rooms = set()
 
+    while queue.size() > 0:
+        path = queue.dequeue()
+        room = path[-1]
+
+        for dir, rm in room_maps[room[0]].items():
+            if rm not in visited_rooms:
+                room_path = list(path)
+                room_path.append((rm, dir))
+                visited_rooms.add(rm)
+                queue.enqueue(room_path)
+
+                if rm == '?':
+                    room_path.pop(0)
+                    path_to_room = [rm[1] for rm in room_path]
+                    return path_to_room
+
+    return None
 
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
