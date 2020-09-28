@@ -64,6 +64,41 @@ def reverse_dir(dir):
     else:
         return 'w'
 
+
+def across_map(dir):
+    directions = {}
+
+    from_id = player.current_room.id
+    from_dir = reverse_dir(dir)
+
+    room_id = player.current_room.get_room_in_direction(dir).id
+    room_maps[from_id][dir] = room_id
+
+    player.travel(dir)
+    traversal_path.append(dir)
+
+    if room_id not in room_maps:
+        for exit in player.current_room.get_exits():
+            reverse = reverse_dir(exit)
+            exit_id = player.current_room.get_room_in_direction(exit).id 
+
+            if exit_id not in room_maps:
+                directions[exit] = '?'
+            elif exit is from_dir:
+                directions[exit] = from_id
+            elif room_maps[exit_id][reverse] == '?':
+                print(f"""Player's current room: {player.current_room.id},
+                you came from: {from_id} to the {reverse},
+                your exit is {exit_id} to the {reverse} 
+                with id: {player.current_room.id}""")
+
+                room_maps[exit_id][reverse] = room_id
+
+        room_maps[room_id] = directions
+
+
+
+
 # TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
 player.current_room = world.starting_room
